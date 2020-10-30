@@ -1,4 +1,8 @@
-$bgColor: #24292e;
+// @import "../../node_modules/normalize.css/normalize.css";
+
+$GreyDark: #24292e;
+$GreyLight: #3a3a3b;
+$GreyVeryLight: #7d7d80;
 $text: #fff;
 
 @font-face {
@@ -12,6 +16,146 @@ body {
   padding: 1rem;
   margin: 0;
   font-family: Comic, sans-serif;
-  background-color: $bgColor;
+  background-color: $GreyDark;
   color: $text;
+  width: 100%;
+}
+
+.container {
+  width: 1000px;
+  height: 100%;
+  margin: 0 auto;
+
+  display: flex;;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  background-color: $GreyLight;
+
+  border: 2px solid $GreyVeryLight;
+  border-radius: 6px;
+
+}
+
+.search {
+  width: 600px;
+  padding: 15px;
+
+  &__input {
+    width: 100%;
+    padding: 5px; 
+    
+    color: $text;
+    background-color: $GreyDark;
+    border: 2px solid $GreyVeryLight;
+    border-radius: 6px;
+    outline: none;
+  }
+
+  &__suggest {
+    width: 100%;
+    height: 100%;
+
+    list-style-type: none;
+  }
+
+  &__suggest-item {
+    margin: 10px 0;
+    padding: 5px;
+    width: 85%;
+
+    border: 2px solid $GreyVeryLight;
+    border-radius: 6px;
+
+    &:hover {
+      background-color: $GreyVeryLight;
+      cursor: pointer;
+    }
+
+    &:active {
+      background-color: $GreyDark;
+    }
+
+  }
+}
+
+.result {
+  width: 520px;
+  padding: 15px;
+
+  &__list {
+    width: 100%;
+    height: 100%;
+    padding-inline-start: 0;
+
+    list-style-type: none;
+
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+}
+
+.card {
+  width: 180px;
+  height: 200px;
+  margin-left: 40px;
+  margin-bottom: 20px;
+
+  background-color: $GreyDark;
+
+  border: 2px solid $GreyVeryLight;
+  border-radius: 6px;
+  padding: 6px;
+
+  display: flex;
+  flex-direction: column;
+
+  &__info {
+    width: 80%;
+  }
+
+
+  &__name {
+    margin-block-start: 0;
+    max-height: 1.5rem;
+    overflow: hidden;
+
+    font-size: large;
+    text-align: center;
+  }
+
+  & p {
+    font-size: small;
+  }
+}
+
+.close-btn {
+  width: 23px;
+  height: 23px;
+  margin-left: auto;
+  margin-right: 0;
+
+  background-color: black;
+  border: 2px solid $GreyVeryLight;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+
+  
+
+  &:hover {
+    background-color: pink;
+  }
+
+
+  &::before {
+    display: block;
+    content: "\00d7";
+    color: red;
+    font-size: 2rem;
+    transform: translate(-5px, -10px);
+  }
 }

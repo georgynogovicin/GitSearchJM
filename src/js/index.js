@@ -1,19 +1,13 @@
 import '../scss/style.scss';
-import debounce from './debounce';
+import * as elements from './elements';
+import debounce from './debounce'; 
 
 
 
-const searchInput = document.querySelector('.search__input');
-const suggestList = document.querySelector('.search__suggest');
-const resultList = document.querySelector('.result__list');
 
-const responseHandler = (response) => {
-    suggestList.append(createSuggest(response));
-    suggestList.addEventListener('click', (event) => {
-        const item = event.target;
-        chooseSuggest(item);
-    })
-}
+
+
+
 
 
 const createSuggest = (response) => {
@@ -40,7 +34,34 @@ const createSuggest = (response) => {
     return suggestList;
 }
 
-const chooseSuggest = (item) => {
+
+const debounceFetch = debounce(async () => await fetchResponse(elements.searchInput.value), 500);
+
+elements.searchInput.addEventListener('input', event => {
+    elements.suggestList.innerHTML = "";
+    debounceFetch();
+});
+
+const fetchResponse = async function (value) {
+    await fetch(`https://api.github.com/search/repositories?q=${value}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/vnd.github.mercy-preview+json" },
+    })
+    .then(response => response.json())
+    .then((response) => responseHandler(response));
+};
+
+const responseHandler = (response) => {
+    elements.suggestList.append(createSuggest(response));
+    elements.suggestList.addEventListener('click', (event) => {
+        const item = event.target;
+        addToResult(item);
+        elements.searchInput.value = '';
+        elements.suggestList.innerHTML = '';
+    }, {once: true})
+}
+
+const addToResult = (item) => {
     const name = item.dataset.name;
     const owner = item.dataset.owner;
     const stars = item.dataset.stars;
@@ -56,32 +77,23 @@ const chooseSuggest = (item) => {
     closeBtn.classList.add('close-btn');
     cardInfo.classList.add('card__info');
 
-    card.insertAdjacentElement('afterbegin', closeBtn);
-    card.insertAdjacentElement('beforeend', cardInfo);
-    cardInfo.insertAdjacentHTML('beforeend', cardInfoText);
-
     closeBtn.addEventListener('click', (event) => {
         event.target.parentNode.parentNode.removeChild(event.target.parentNode)
     })
 
-    resultList.insertAdjacentElement('afterbegin', card);
+    card.insertAdjacentElement('afterbegin', closeBtn);
+    card.insertAdjacentElement('beforeend', cardInfo);
+    cardInfo.insertAdjacentHTML('beforeend', cardInfoText);
+
+    
+
+    elements.resultList.insertAdjacentElement('afterbegin', card);
 }
 
-const fetchResponse = async function (value) {
-    await fetch(`https://api.github.com/search/repositories?q=${value}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/vnd.github.mercy-preview+json" },
-    })
-    .then(response => response.json())
-    .then((response) => responseHandler(response));
-};
 
-searchInput.addEventListener('input', event => {
-    suggestList.innerHTML = "";
+elements.searchInput.addEventListener('input', event => {
+    elements.suggestList.innerHTML = "";
     debounceFetch();
 });
 
 
-
-
-const debounceFetch = debounce(async () => await fetchResponse(searchInput.value), 500);

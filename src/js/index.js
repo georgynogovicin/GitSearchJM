@@ -3,13 +3,6 @@ import * as elements from './elements';
 import debounce from './debounce'; 
 
 
-
-
-
-
-
-
-
 const createSuggest = (response) => {
     let suggestList = new DocumentFragment();
     let suggestArr = [];
@@ -37,7 +30,7 @@ const createSuggest = (response) => {
 
 const debounceFetch = debounce(async () => await fetchResponse(elements.searchInput.value), 500);
 
-elements.searchInput.addEventListener('input', event => {
+elements.searchInput.addEventListener('input', () => {
     elements.suggestList.innerHTML = "";
     debounceFetch();
 });
